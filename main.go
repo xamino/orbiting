@@ -25,6 +25,7 @@ func main() {
 
 	rect := sdl.Rect{0, 0, 200, 200}
 	surface.FillRect(&rect, 0xffff0000)
+	surface.FillRect(&sdl.Rect{200, 200, 200, 200}, 0x0000ffff)
 	window.UpdateSurface()
 
 	sdl.Delay(1000)
