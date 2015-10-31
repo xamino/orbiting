@@ -2,56 +2,62 @@ package main
 
 import (
 	"log"
+	"time"
 
-	"github.com/veandco/go-sdl2/sdl"
+	"github.com/xamino/orbengine"
 )
 
-var ypos int32
+// TODO camera as entity! makes for really simple render occlusion
 
 func main() {
-
-	sdl.Init(sdl.INIT_EVERYTHING)
-
-	window, err := sdl.CreateWindow("test", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		800, 600, sdl.WINDOW_SHOWN)
+	// build controller
+	controller, err := orbengine.Build()
 	if err != nil {
-		panic(err)
+		log.Println("Failed to start engine:", err)
+		return
 	}
-	defer window.Destroy()
-
-	surface, err := window.GetSurface()
-	if err != nil {
-		panic(err)
+	// destroy it when done
+	defer controller.Destroy()
+	// build two test entities
+	red := newSquare(50, 50, 25, 25, 255, 0, 0)
+	blue := newSquare(250, 250, 100, 100, 0, 0, 255)
+	controller.AddEntity("red", red)
+	controller.AddEntity("blue", blue)
+	// TODO start controller to run
+	timeout := time.Tick(5 * time.Second)
+	tick := time.Tick(250 * time.Millisecond)
+	for {
+		select {
+		case <-timeout:
+			log.Println("Quit!")
+			break
+		case <-tick:
+			controller.Iterate()
+			log.Println("Drew")
+		}
 	}
+}
 
-	running := true
-	for running {
-		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			switch t := event.(type) {
-			case *sdl.QuitEvent:
-				log.Println("quiting")
-				running = false
-			case *sdl.KeyDownEvent:
-				switch t.Keysym.Sym {
-				case sdl.K_UP:
-					log.Println("UP pressed!")
-					ypos -= 10
-				case sdl.K_DOWN:
-					log.Println("DOWN pressed!")
-					ypos += 10
-				}
+/*
+running := true
+for running {
+	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+		switch t := event.(type) {
+		case *sdl.QuitEvent:
+			log.Println("quiting")
+			running = false
+		case *sdl.KeyDownEvent:
+			switch t.Keysym.Sym {
+			case sdl.K_UP:
+				log.Println("UP pressed!")
+				ypos -= 10
+			case sdl.K_DOWN:
+				log.Println("DOWN pressed!")
+				ypos += 10
 			}
 		}
-		render(surface)
-		window.UpdateSurface()
 	}
-
-	sdl.Quit()
+	render(surface)
+	window.UpdateSurface()
 }
-
-func render(surface *sdl.Surface) {
-	// TODO redrawing the entire surface is ugly. Look into how SDL allows intelligent updating
-	surface.FillRect(&sdl.Rect{X: 0, Y: 0, W: surface.W, H: surface.H}, 0x00000000)
-	surface.FillRect(&sdl.Rect{X: 0, Y: 0, W: 200, H: 200}, 0xffff0000)
-	surface.FillRect(&sdl.Rect{X: 200, Y: ypos, W: 200, H: 200}, 0x0000ffff)
-}
+*/
