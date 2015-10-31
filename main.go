@@ -21,19 +21,15 @@ func main() {
 	// build two test entities
 	red := newSquare(50, 50, 25, 25, 255, 0, 0)
 	blue := newSquare(250, 250, 100, 100, 0, 0, 255)
-	controller.AddEntity("red", red)
-	controller.AddEntity("blue", blue)
-	// TODO start controller to run
-	timeout := time.Tick(5 * time.Second)
-	tick := time.Tick(250 * time.Millisecond)
+	_ = controller.AddEntity("red", red)
+	_ = controller.AddEntity("blue", blue)
+	// start controller to run
+	// TODO this should be handled in one elegant function WITHIN Controller including events!
+	tick := time.Tick(100 * time.Millisecond)
 	for {
 		select {
-		case <-timeout:
-			log.Println("Quit!")
-			break
 		case <-tick:
 			controller.Iterate()
-			log.Println("Drew")
 		}
 	}
 }
