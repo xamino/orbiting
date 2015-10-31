@@ -9,7 +9,6 @@ import (
 var ypos int32
 
 func main() {
-	log.Println("Hello world!")
 
 	sdl.Init(sdl.INIT_EVERYTHING)
 
@@ -52,7 +51,7 @@ func main() {
 
 func render(surface *sdl.Surface) {
 	// TODO redrawing the entire surface is ugly. Look into how SDL allows intelligent updating
-	surface.FillRect(&sdl.Rect{0, 0, surface.W, surface.H}, 0x00000000)
-	surface.FillRect(&sdl.Rect{0, 0, 200, 200}, 0xffff0000)
-	surface.FillRect(&sdl.Rect{200, ypos, 200, 200}, 0x0000ffff)
+	surface.FillRect(&sdl.Rect{X: 0, Y: 0, W: surface.W, H: surface.H}, 0x00000000)
+	surface.FillRect(&sdl.Rect{X: 0, Y: 0, W: 200, H: 200}, 0xffff0000)
+	surface.FillRect(&sdl.Rect{X: 200, Y: ypos, W: 200, H: 200}, 0x0000ffff)
 }
