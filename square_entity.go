@@ -40,6 +40,13 @@ func (s *square) Bounds() *sdl.Rect {
 	return s.rect
 }
 
+func (s *square) Texture() (texture *sdl.Texture) {
+}
+func (s *square) Position() *sdl.Point {
+}
+func (s *square) Bound() *sdl.Rect {
+}
+
 // Action interface
 func (s *square) Action() {
 	//TODO update pos and update draw thingy?
