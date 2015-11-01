@@ -19,9 +19,9 @@ func main() {
 	// destroy it when done
 	defer controller.Destroy()
 	// build two test entities
-	red := newSquare(50, 50, 25, 25, 255, 0, 0)
-	blue := newSquare(250, 250, 100, 100, 0, 0, 255)
-	green := newSquare(-20, -20, 20, 20, 0, 255, 0)
+	red := newSquare(50, 50, 25, 25, 255, 0, 0, 0)
+	blue := newSquare(250, 250, 100, 100, 0, 0, 255, 0)
+	green := newSquare(400, 400, 20, 20, 0, 255, 0, 22.5)
 	_ = controller.AddEntity("red", red)
 	_ = controller.AddEntity("blue", blue)
 	_ = controller.AddEntity("green", green)

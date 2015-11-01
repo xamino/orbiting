@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/xamino/orbengine"
 )
@@ -14,9 +12,10 @@ type square struct {
 	rect  *sdl.Rect
 	color *sdl.Color
 	pos   *sdl.Point
+	rot   float64
 }
 
-func newSquare(posX, posY, width, height int32, r, g, b uint8) *square {
+func newSquare(posX, posY, width, height int32, r, g, b uint8, rotation float64) *square {
 	pos := &sdl.Point{X: posX, Y: posY}
 	rect := &sdl.Rect{
 		X: posX - (width / 2),
@@ -27,15 +26,20 @@ func newSquare(posX, posY, width, height int32, r, g, b uint8) *square {
 	return &square{
 		rect:  rect,
 		color: color,
-		pos:   pos}
+		pos:   pos,
+		rot:   rotation}
 }
 
 func (s *square) Render(renderer *orbengine.Renderer) {
 	renderer.SetDrawColor(s.color.R, s.color.G, s.color.B, s.color.A)
-	renderer.FillRect(nil)
+	renderer.FillRect(nil) // fill nil --> fill everything
 }
 
 func (s *square) Redraw() bool {
+	// green needs to be redrawn frequently because it is color animated
+	if s.color.G == 255 {
+		return true
+	}
 	return false
 }
 
@@ -60,22 +64,37 @@ func (s *square) Height() int {
 }
 
 func (s *square) Rotation() float64 {
-	return 0
+	return s.rot
 }
 
-// Action interface
 func (s *square) Action() {
-	//TODO update pos and update draw thingy?
-	// FIXME: hack: only red square
-	if s.color.R == 255 {
+	// have red move (green check to avoid green moving every now and then)
+	if s.color.R == 255 && s.color.G == 0 {
 		// reset if reached border
-		if s.pos.X < 0 {
-			log.Println("reset!")
-			s.pos.X = 100
-			s.rect.X = 100
+		if s.pos.X < int32(-s.Width()) {
+			// log.Println("Red: reset")
+			s.pos.X = 600
+			s.rect.X = 600
 		}
 		// TODO couple these two values somehow
-		s.pos.X -= 10
-		s.rect.X -= 10
+		s.pos.X -= 5
+		s.rect.X -= 5
+	}
+	// have blue continously turn
+	if s.color.B == 255 {
+		if s.rot >= 360 {
+			// log.Println("Blue: reset")
+			s.rot = 0
+		}
+		s.rot = (s.rot + 5)
+	}
+	// have green animate color
+	if s.color.G == 255 {
+		if s.color.R >= 255 {
+			// log.Println("Green: reset")
+			s.color.R = 0
+		} else {
+			s.color.R += 5
+		}
 	}
 }
