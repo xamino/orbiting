@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/veandco/go-sdl2/sdl"
+	"github.com/xamino/orbengine"
 )
 
 /*
@@ -29,22 +30,33 @@ func newSquare(posX, posY, width, height int32, r, g, b uint8) *square {
 		pos:   pos}
 }
 
-// Drawable interface
-func (s *square) Draw(renderer *sdl.Renderer) {
+func (s *square) Render(renderer *orbengine.Renderer) {
 	renderer.SetDrawColor(s.color.R, s.color.G, s.color.B, s.color.A)
-	renderer.FillRect(s.rect)
+	renderer.FillRect(nil)
 }
 
-// Boundable interface
-func (s *square) Bounds() *sdl.Rect {
-	return s.rect
-}
-
-func (s *square) Texture() (texture *sdl.Texture) {
-}
 func (s *square) Position() *sdl.Point {
+	return s.pos
 }
-func (s *square) Bound() *sdl.Rect {
+
+func (s *square) Offset() *sdl.Point {
+	return nil
+}
+
+func (s *square) Scale() int {
+	return 1
+}
+
+func (s *square) Width() int {
+	return int(s.rect.W)
+}
+
+func (s *square) Height() int {
+	return int(s.rect.H)
+}
+
+func (s *square) Rotation() float64 {
+	return 0
 }
 
 // Action interface
