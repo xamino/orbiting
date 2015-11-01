@@ -35,6 +35,10 @@ func (s *square) Render(renderer *orbengine.Renderer) {
 	renderer.FillRect(nil)
 }
 
+func (s *square) Redraw() bool {
+	return false
+}
+
 func (s *square) Position() *sdl.Point {
 	return s.pos
 }
