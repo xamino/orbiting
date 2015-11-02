@@ -18,13 +18,16 @@ func main() {
 	}
 	// destroy it when done
 	defer controller.Destroy()
-	// build two test entities
+	// build test entities
 	red := newSquare(50, 50, 25, 25, 255, 0, 0, 0)
 	blue := newSquare(250, 250, 100, 100, 0, 0, 255, 0)
 	green := newSquare(400, 400, 20, 20, 0, 255, 0, 22.5)
 	_ = controller.AddEntity("red", red)
 	_ = controller.AddEntity("blue", blue)
 	_ = controller.AddEntity("green", green)
+	// build player
+	player := newPlayer(350, 350, 50, 50, 127, 127, 127, controller)
+	_ = controller.AddEntity("player", player)
 	// start controller to run
 	// TODO this should be handled in one elegant function WITHIN Controller including events!
 	tick := time.Tick(100 * time.Millisecond)
@@ -35,27 +38,3 @@ func main() {
 		}
 	}
 }
-
-/*
-running := true
-for running {
-	for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-		switch t := event.(type) {
-		case *sdl.QuitEvent:
-			log.Println("quiting")
-			running = false
-		case *sdl.KeyDownEvent:
-			switch t.Keysym.Sym {
-			case sdl.K_UP:
-				log.Println("UP pressed!")
-				ypos -= 10
-			case sdl.K_DOWN:
-				log.Println("DOWN pressed!")
-				ypos += 10
-			}
-		}
-	}
-	render(surface)
-	window.UpdateSurface()
-}
-*/
