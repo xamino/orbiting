@@ -9,6 +9,7 @@ import (
 player is a simple controllable entity.
 */
 type player struct {
+	id        string
 	rect      *sdl.Rect
 	color     *sdl.Color
 	moveup    bool
@@ -17,7 +18,7 @@ type player struct {
 	moveright bool
 }
 
-func newPlayer(posX, posY, width, height int32, r, g, b uint8, c *orbengine.Controller) *player {
+func newPlayer(id string, posX, posY, width, height int32, r, g, b uint8, c *orbengine.Controller) *player {
 	rect := &sdl.Rect{
 		X: posX - (width / 2),
 		Y: posY - (height / 2),
@@ -25,6 +26,7 @@ func newPlayer(posX, posY, width, height int32, r, g, b uint8, c *orbengine.Cont
 		H: height}
 	color := &sdl.Color{R: r, G: g, B: b, A: 255}
 	p := &player{
+		id:    id,
 		rect:  rect,
 		color: color}
 	// get key channels
@@ -33,6 +35,10 @@ func newPlayer(posX, posY, width, height int32, r, g, b uint8, c *orbengine.Cont
 	_ = c.RegisterKey("Left", func() { p.moveleft = true }, func() { p.moveleft = false })
 	_ = c.RegisterKey("Right", func() { p.moveright = true }, func() { p.moveright = false })
 	return p
+}
+
+func (p *player) Identification() string {
+	return p.id
 }
 
 func (p *player) Render(renderer *orbengine.Renderer) {
@@ -67,6 +73,10 @@ func (p *player) Height() int {
 }
 
 func (p *player) Rotation() float64 {
+	return 0
+}
+
+func (p *player) Layer() int {
 	return 0
 }
 

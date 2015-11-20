@@ -9,13 +9,14 @@ import (
 square is a simple test entity.
 */
 type square struct {
+	id    string
 	rect  *sdl.Rect
 	color *sdl.Color
 	pos   *sdl.Point
 	rot   float64
 }
 
-func newSquare(posX, posY, width, height int32, r, g, b uint8, rotation float64) *square {
+func newSquare(id string, posX, posY, width, height int32, r, g, b uint8, rotation float64) *square {
 	pos := &sdl.Point{X: posX, Y: posY}
 	rect := &sdl.Rect{
 		X: posX - (width / 2),
@@ -24,10 +25,15 @@ func newSquare(posX, posY, width, height int32, r, g, b uint8, rotation float64)
 		H: height}
 	color := &sdl.Color{R: r, G: g, B: b, A: 255}
 	return &square{
+		id:    id,
 		rect:  rect,
 		color: color,
 		pos:   pos,
 		rot:   rotation}
+}
+
+func (s *square) Identification() string {
+	return s.id
 }
 
 func (s *square) Render(renderer *orbengine.Renderer) {
@@ -65,6 +71,10 @@ func (s *square) Height() int {
 
 func (s *square) Rotation() float64 {
 	return s.rot
+}
+
+func (s *square) Layer() int {
+	return -1
 }
 
 func (s *square) Action() {
